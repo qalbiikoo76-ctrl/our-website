@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#073b2d">
+  <title>Groupware | Ambo University IT</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<section id="login" class="login">
+  <aside class="login-brand">
+    <div class="logo"><span class="logo-mark">G</span> Groupware</div>
+    <h1>Fair teamwork,<br>proven by the record.</h1>
+    <p>Every edit is proposed, reviewed by the team and only then saved. Every action is counted, so marks match real effort.</p>
+    <ul class="steps">
+      <li><b>Propose</b><span>Suggest a change. Nothing is overwritten.</span></li>
+      <li><b>Approve</b><span>A majority of the team votes on it.</span></li>
+      <li><b>Commit</b><span>Approved changes are saved and credited.</span></li>
+    </ul>
+    <small>Ambo University, Department of Information Technology</small>
+  </aside>
+
+  <div class="login-panel">
+    <form class="login-card" id="loginForm" autocomplete="off">
+      <h2>Welcome back</h2>
+      <p class="muted">Sign in to your team workspace.</p>
+
+      <div class="seg" role="group" aria-label="Account type">
+        <button type="button" class="active" data-role="student">Student</button>
+        <button type="button" data-role="instructor">Instructor</button>
+      </div>
+
+      <label for="loginUser">Name</label>
+      <select id="loginUser"></select>
+
+      <label for="loginPass">Password</label>
+      <div class="pass">
+        <input id="loginPass" type="password" placeholder="Enter any password (demo)">
+        <button type="button" id="passToggle" class="btn small ghost" aria-label="Show password">Show</button>
+      </div>
+
+      <button class="btn primary block" type="submit">Sign in</button>
+      <p class="hint">Demo mode: no real password is checked. Your PHP backend will do that later.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ================= APP ================= -->
+<div id="app" class="app hidden">
+  <header class="topbar">
+    <div class="brand"><span class="logo-mark">G</span><span>Groupware</span></div>
+
+    <nav class="nav" id="nav" aria-label="Main">
+      <button data-view="dashboard" class="active"><i>&#9670;</i><span>Team</span></button>
+      <button data-view="project"><i>&#9636;</i><span>Project</span></button>
+      <button data-view="proposals"><i>&#10003;</i><span>Proposals</span><em id="badge" class="badge hidden">0</em></button>
+      <button data-view="activity"><i>&#8801;</i><span>Activity</span></button>
+      <button data-view="instructor" id="navInstructor" class="hidden"><i>%</i><span>Marks</span></button>
+    </nav>
+
+    <div class="who">
+      <span class="avatar" id="whoAvatar"></span>
+      <div class="who-text"><b id="whoName"></b><small id="whoRole"></small></div>
+      <button id="logoutBtn" class="btn small ghost">Sign out</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="view">
+      <div class="hero" id="hero"></div>
+      <div class="stats" id="stats"></div>
+
+      <div class="head"><h2>Live leaderboard</h2><span class="live"><i></i>Updating live</span></div>
+      <p class="muted" id="boardNote"></p>
+      <ol class="board" id="board"></ol>
+
+      <h2>Latest activity</h2>
+      <ul class="feed" id="recent"></ul>
+    </section>
+
+    <!-- PROJECT -->
+    <section id="view-project" class="view hidden">
+      <h2>Project content</h2>
+      <p class="muted">Edits never save directly. Each one becomes a proposal your team votes on.</p>
+      <div id="items"></div>
+    </section>
+
+    <!-- PROPOSALS -->
+    <section id="view-proposals" class="view hidden">
+      <h2>Proposals</h2>
+      <div class="tabs">
+        <button class="tab active" data-filter="pending">Pending</button>
+        <button class="tab" data-filter="history">History</button>
+      </div>
+      <div id="proposals"></div>
+    </section>
+
+    <!-- ACTIVITY -->
+    <section id="view-activity" class="view hidden">
+      <h2>Audit trail</h2>
+      <p class="muted">Every valid action, in order. Marks are built from this record.</p>
+      <div class="filters"><select id="logFilter" aria-label="Filter by member"></select></div>
+      <ul class="feed" id="logList"></ul>
+    </section>
+
+    <!-- INSTRUCTOR -->
+    <section id="view-instructor" class="view hidden">
+      <h2>Assessment settings</h2>
+      <form id="settingsForm" class="panel">
+        <div class="grid2">
+          <div><label for="maxScore">Total marks for this assignment</label>
+            <input id="maxScore" type="number" min="1" step="1"></div>
+          <div><label for="wProposal">Points per proposal created</label>
+            <input id="wProposal" type="number" min="0" step="0.5"></div>
+          <div><label for="wCommit">Points per change committed</label>
+            <input id="wCommit" type="number" min="0" step="0.5"></div>
+          <div><label for="wReview">Points per review or vote cast</label>
+            <input id="wReview" type="number" min="0" step="0.5"></div>
+        </div>
+        <button class="btn primary" type="submit">Save and recalculate</button>
+      </form>
+
+      <h2>Final marks</h2>
+      <div class="table-wrap"><table id="marksTable"></table></div>
+      <button id="exportBtn" class="btn">Download marks (CSV)</button>
+      <button id="resetBtn" class="btn ghost">Reset demo data</button>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="brand light"><span class="logo-mark">G</span><span>Groupware</span></div>
+        <p>The remote collaboration, accountability and automated assessment engine.</p>
+      </div>
+      <div>
+        <h4>Built by</h4>
+        <p class="names">Gemta Gemuse<br>Duga Gurmesa</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul class="flinks">
+          <li><a href="#" data-go="dashboard">Team leaderboard</a></li>
+          <li><a href="#" data-go="project">Project content</a></li>
+          <li><a href="#" data-go="proposals">Proposals</a></li>
+          <li><a href="#" data-go="activity">Audit trail</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Challenge</h4>
+        <p>Ambo University<br>Department of Information Technology<br>Web Development Challenge</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span class="year"></span> Gemta Gemuse and Duga Gurmesa. All rights reserved.</span>
+      <span>Organizer: Firaol Kapita Daba</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ================= PROPOSE MODAL ================= -->
+<dialog id="proposeDialog">
+  <form method="dialog" id="proposeForm">
+    <h3 id="proposeTitle">Propose a change</h3>
+    <label for="proposeContent">New content</label>
+    <textarea id="proposeContent" rows="7" required></textarea>
+    <label for="proposeNote">Why this change?</label>
+    <input id="proposeNote" type="text" placeholder="One line for reviewers" required>
+    <div class="row">
+      <button type="button" class="btn ghost" id="proposeCancel">Cancel</button>
+      <button type="submit" class="btn primary">Submit proposal</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>
